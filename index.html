@@ -53,6 +53,7 @@
             --success: #27AE60;
             --warning: #F39C12;
             --shadow: rgba(44, 62, 80, 0.08);
+            --cta-h: 68px;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -284,33 +285,38 @@
         .faq-question { font-weight: 600; font-size: 1.1rem; margin-bottom: 12px; color: var(--accent-dark); }
         .faq-answer { color: var(--text); line-height: 1.6; }
         
-.sticky-cta {
-    position: fixed;
+.sticky-cta-wrap {
+    position: sticky;
     bottom: 0;
+    height: calc(var(--cta-h) + env(safe-area-inset-bottom));
+}
+
+.sticky-cta {
+    position: absolute;
     left: 0;
     right: 0;
-    height: 68px;
+    bottom: 0;
+    height: calc(var(--cta-h) + env(safe-area-inset-bottom));
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-top: 1px solid var(--card-border);
     box-shadow: 0 -2px 12px var(--shadow);
-    z-index: 999;
-    padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
+    z-index: 999;
     opacity: 0;
+    transform: translateY(100%);
     pointer-events: none;
-    transition: opacity 300ms ease-out;
+    transition: opacity 250ms ease, transform 250ms ease;
 }
 
 .sticky-cta.visible {
     opacity: 1;
+    transform: translateY(0);
     pointer-events: auto;
-}
-
-body.sticky-cta-active {
-    padding-bottom: 68px;
 }
 
 .sticky-cta .cta-button {
@@ -639,13 +645,15 @@ body.sticky-cta-active {
 
     </article>
 
-</main>
+    <div class="sticky-cta-wrap">
+        <div class="sticky-cta">
+            <a href="https://example.com/your-affiliate-link" class="cta-button" data-affiliate="true" data-cta-id="sticky-cta">
+                Get Brain Training for Dogs →
+            </a>
+        </div>
+    </div>
 
-<div class="sticky-cta">
-    <a href="https://example.com/your-affiliate-link" class="cta-button" data-affiliate="true" data-cta-id="sticky-cta">
-        Get Brain Training for Dogs →
-    </a>
-</div>
+</main>
 
 <footer>
     <div class="footer-content">
@@ -663,36 +671,44 @@ body.sticky-cta-active {
 </footer>
 
 <script>
-// Sticky CTA al 50% scroll - mobile compatible
+const root = document.scrollingElement || document.documentElement;
+const el = document.querySelector('.sticky-cta');
 let ticking = false;
+const SHOW_AT = 0.52;
+const HIDE_AT = 0.48;
+let isVisible = false;
+
+function getClientHeight() {
+    return (window.visualViewport && window.visualViewport.height) || root.clientHeight;
+}
 
 function updateStickyCTA() {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    const scrollHeight = document.documentElement.scrollHeight;
-    const clientHeight = document.documentElement.clientHeight;
-    const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
-    const stickyCta = document.querySelector('.sticky-cta');
-    
-    if (scrollPercent >= 50) {
-        stickyCta.classList.add('visible');
-        document.body.classList.add('sticky-cta-active');
-    } else {
-        stickyCta.classList.remove('visible');
-        document.body.classList.remove('sticky-cta-active');
+    const max = root.scrollHeight - getClientHeight();
+    const pct = max > 0 ? (root.scrollTop / max) : 0;
+
+    if (!isVisible && pct >= SHOW_AT) {
+        el.classList.add('visible');
+        isVisible = true;
+    } else if (isVisible && pct <= HIDE_AT) {
+        el.classList.remove('visible');
+        isVisible = false;
     }
-    
     ticking = false;
 }
 
-function requestTick() {
+function onScroll() {
     if (!ticking) {
         requestAnimationFrame(updateStickyCTA);
         ticking = true;
     }
 }
 
-window.addEventListener('scroll', requestTick, { passive: true });
-window.addEventListener('resize', requestTick, { passive: true });
+addEventListener('scroll', onScroll, { passive: true });
+addEventListener('resize', onScroll, { passive: true });
+
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', onScroll, { passive: true });
+}
 </script>
 
 </body>
