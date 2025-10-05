@@ -285,7 +285,6 @@
         .faq-answer { color: var(--text); line-height: 1.6; }
         
         .sticky-cta {
-    display: none;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -297,15 +296,17 @@
     box-shadow: 0 -2px 12px var(--shadow);
     z-index: 999;
     padding: 10px 20px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    will-change: transform;
+    transform: translate3d(0, 100%, 0);
+    transition: transform 300ms ease-out;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .sticky-cta.visible {
-    display: flex;
+    transform: translate3d(0, 0, 0);
 }
 
 body.sticky-cta-active {
@@ -663,6 +664,8 @@ body.sticky-cta-active {
 
 <script>
 // Sticky CTA al 50% scroll - mobile compatible
+let ticking = false;
+
 function updateStickyCTA() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     const scrollHeight = document.documentElement.scrollHeight;
@@ -677,10 +680,19 @@ function updateStickyCTA() {
         stickyCta.classList.remove('visible');
         document.body.classList.remove('sticky-cta-active');
     }
+    
+    ticking = false;
 }
 
-window.addEventListener('scroll', updateStickyCTA);
-window.addEventListener('resize', updateStickyCTA);
+function requestTick() {
+    if (!ticking) {
+        requestAnimationFrame(updateStickyCTA);
+        ticking = true;
+    }
+}
+
+window.addEventListener('scroll', requestTick, { passive: true });
+window.addEventListener('resize', requestTick, { passive: true });
 </script>
 
 </body>
