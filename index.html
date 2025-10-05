@@ -288,25 +288,16 @@
 .sticky-cta-wrap {
     position: sticky;
     bottom: 0;
-    height: calc(var(--cta-h) + env(safe-area-inset-bottom));
+    height: auto;
+    padding: 0 0 calc(16px + env(safe-area-inset-bottom));
 }
 
 .sticky-cta {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: calc(var(--cta-h) + env(safe-area-inset-bottom));
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-top: 1px solid var(--card-border);
-    box-shadow: 0 -2px 12px var(--shadow);
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
-    z-index: 999;
+    padding: 0 20px;
     opacity: 0;
     transform: translateY(100%);
     pointer-events: none;
@@ -325,6 +316,7 @@
     height: 48px;
     line-height: 48px;
     margin: 0;
+    box-shadow: 0 4px 16px rgba(211, 84, 0, 0.3);
 }
         
         footer {
