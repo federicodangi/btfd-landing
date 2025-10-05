@@ -643,9 +643,12 @@ body.sticky-cta-active {
 </footer>
 
 <script>
-// Sticky CTA al 50% scroll
-window.addEventListener('scroll', function() {
-    const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+// Sticky CTA al 50% scroll - mobile compatible
+function updateStickyCTA() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+    const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
     const stickyCta = document.querySelector('.sticky-cta');
     
     if (scrollPercent >= 50) {
@@ -655,7 +658,10 @@ window.addEventListener('scroll', function() {
         stickyCta.classList.remove('visible');
         document.body.classList.remove('sticky-cta-active');
     }
-});
+}
+
+window.addEventListener('scroll', updateStickyCTA);
+window.addEventListener('resize', updateStickyCTA);
 </script>
 
 </body>
