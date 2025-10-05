@@ -67,6 +67,9 @@
         @media (min-width: 768px) { body { font-size: 18px; } }
         
         header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--card-border);
@@ -354,16 +357,14 @@
 
 <header>
     <div class="header-content">
-        <a href="#" class="logo">Dog Behavior Daily</a>
+        <a href="#top" class="logo">Dog Behavior Daily</a>
         <nav class="nav-links">
-            <a href="#">Home</a>
             <a href="#about">About</a>
-            <a href="#">Contact</a>
         </nav>
     </div>
 </header>
 
-<main>
+<main id="top">
     <article>
         <div class="hero">
             <h1>3 Brain Games Certified Trainers Use to Improve Dog Behavior at Home</h1>
