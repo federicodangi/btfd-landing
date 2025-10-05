@@ -269,32 +269,37 @@
         .faq-answer { color: var(--text-light); line-height: 1.6; }
         
         .sticky-cta {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 68px;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid var(--card-border);
-            box-shadow: 0 -2px 12px var(--shadow);
-            z-index: 999;
-            padding: 10px 20px;
-        }
-        
-        @media (max-width: 767px) {
-            .sticky-cta { display: flex; align-items: center; justify-content: center; }
-            body { padding-bottom: 68px; }
-        }
-        
-        .sticky-cta .cta-button {
-            width: 100%;
-            max-width: 400px;
-            height: 48px;
-            line-height: 48px;
-            margin: 0;
-        }
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 68px;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--card-border);
+    box-shadow: 0 -2px 12px var(--shadow);
+    z-index: 999;
+    padding: 10px 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.sticky-cta.visible {
+    display: flex;
+}
+
+body.sticky-cta-active {
+    padding-bottom: 68px;
+}
+
+.sticky-cta .cta-button {
+    width: 100%;
+    max-width: 400px;
+    height: 48px;
+    line-height: 48px;
+    margin: 0;
+}
         
         footer {
             background: #F3F1EE;
@@ -613,3 +618,45 @@
         </div>
 
     </article>
+
+</main>
+
+<div class="sticky-cta">
+    <a href="https://example.com/your-affiliate-link" class="cta-button" data-affiliate="true" data-cta-id="sticky-cta">
+        Get Brain Training for Dogs →
+    </a>
+</div>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="#about">About</a>
+            <a href="#top">Privacy Policy</a>
+            <a href="#top">Terms of Service</a>
+        </div>
+        <div class="footer-disclaimer">
+            <p><strong>Disclaimer:</strong> This site contains affiliate links. We may earn a commission if you purchase through our links at no additional cost to you. We only recommend products we've researched and believe provide value.</p>
+            <p>Results may vary. For serious behavioral issues or aggression, consult a certified professional dog trainer or veterinary behaviorist.</p>
+        </div>
+        <p style="margin-top: 20px;">&copy; 2025 Dog Behavior Daily. All rights reserved.</p>
+    </div>
+</footer>
+
+<script>
+// Sticky CTA al 50% scroll
+window.addEventListener('scroll', function() {
+    const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    const stickyCta = document.querySelector('.sticky-cta');
+    
+    if (scrollPercent >= 50) {
+        stickyCta.classList.add('visible');
+        document.body.classList.add('sticky-cta-active');
+    } else {
+        stickyCta.classList.remove('visible');
+        document.body.classList.remove('sticky-cta-active');
+    }
+});
+</script>
+
+</body>
+</html>
